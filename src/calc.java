@@ -1,10 +1,9 @@
-import java.util.Objects;
 import java.util.Scanner;
 public class calc {
     static String[] arab = new String[]{"10", "1", "2", "3", "4", "5", "6", "7", "8", "9","10","11","12","13","14","15","16"
             ,"17","18","19", "20","21","24","25","27","28","30","32","35","36","40","42","45","48","49","50",
             "54","56","60","63","64","70","72","80","81","90","100" };
-    static String[] rome = new String[]{"X", "I", "II", "III", "IV", "V","VI", "VII", "VIII", "IX","XI","XII","XIII","XIV"
+    static String[] rome = new String[]{"X", "I", "II", "III", "IV", "V","VI", "VII", "VIII", "IX","x","XI","XII","XIII","XIV"
             ,"XV", "XVI","XVII","XVIII","XIX","XX","XXI","XXIV","XXV","XXVII","XXVIII","XXX","XXXII","XXXV","XXXVI",
             "XXXX","XXXXII","XXXXV","XXXXVIII","XXXXIX","L",
             "LIV","LVI","LX","LXIII","LXIV",
@@ -22,16 +21,29 @@ public class calc {
         // checking a and b are roman
         //проверка являются ли a и b римскими
         for (String s : rome) {
-            x = elements[0].equals(s);
+            if (elements[0].equals(s)) {
+                x = true;
+                break;
+            }
+
         }
         for (String s : rome) {
-            y = elements[2].equals(s);
+            if (elements[2].equals(s)) {
+                y = true;
+                break;
+            }
+
         }
-        if(x!=y){
-            System.out.print("Разные системы счисления");
+        if (elements.length != 3) {
+            System.out.println("формат математической операции не удовлетворяет заданию - два операнда и один оператор (+, -, /, *)");
+
         }
-        else{
-        System.out.print(calculating(transAR(elements[0]), elements[1], transAR(elements[2])));
+        else {
+            if (x != y) {
+                System.out.print("Разные системы счисления");
+            } else {
+                System.out.println(calculating(transAR(elements[0]), elements[1], transAR(elements[2])));
+            }
         }
     }
 
@@ -43,12 +55,10 @@ public class calc {
             case ("/") -> String.valueOf(a / b);
             default -> "0";
         };
-        String romres = transRA(res);
-        if(x&y){
-            return romres;
-        }
-        else{
-        return res;}
+       if(x&y){
+           res = transRA(res);
+       }
+       return res;
     }
 
     public static int transAR(String a) {
@@ -70,11 +80,16 @@ public class calc {
     public static String transRA(String a) {
         // checking and transformation arab numbers to roman numbers
         // проверка и перевод арабских цифр в римские
-        String n = " ";
+        String n = "";
+        if(Integer.parseInt(a) < 1){
+            n = "В римской системе нет отрицательных чисел";
+        }
+        else {
         for(int i = 0; i < arab.length; i++){
             if(a.equals(arab[i])){
                 n = (rome[i]);
             }
+         }
         }
         return n;
     }
