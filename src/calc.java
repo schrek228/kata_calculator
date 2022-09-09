@@ -12,7 +12,7 @@ public class calc {
     };
     static boolean x = false;
     static boolean y = false;
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IncorrectInputException {
         // input task, splitting to numbers and activity
         // Ввод задачи, разбиение на числа и действие
         Scanner in = new Scanner(System.in);
@@ -35,19 +35,18 @@ public class calc {
 
         }
         if (elements.length != 3) {
-            System.out.println("формат математической операции не удовлетворяет заданию - два операнда и один оператор (+, -, /, *)");
+            throw new IncorrectInputException("формат математической операции не удовлетворяет заданию - два операнда и один оператор (+, -, /, *)");
 
         }
         else {
             if (x != y) {
-                System.out.print("Разные системы счисления");
+                throw new IncorrectInputException("Разные системы счисления");
             } else {
                 System.out.println(calculating(transAR(elements[0]), elements[1], transAR(elements[2])));
             }
         }
     }
-
-    public static String calculating(int a, String operation, int b) {
+    public static String calculating(int a, String operation, int b) throws IncorrectInputException {
         String res = switch (operation) {
             case ("+") -> String.valueOf(a + b);
             case ("-") -> String.valueOf(a - b);
@@ -61,28 +60,35 @@ public class calc {
        return res;
     }
 
-    public static int transAR(String a) {
+    public static int transAR(String a) throws IncorrectInputException {
         // checking and transformation roman numbers to arab numbers
         // проверка и перевод римских цифр в арабские
         int n = 0;
         for (String s : arab) {
             if (a.equals(s)) {
                 n = Integer.parseInt(s);
+                if(n<1|n>10){
+                    throw new IncorrectInputException("число не лежит в промежутке от 1 до 10");
+
+                }
             }
         }
         for (int i = 0; i < rome.length; i++) {
             if (a.equals(rome[i])) {
                 n = Integer.parseInt(arab[i]);
+                if(n<1|n>10) {
+                    throw new IncorrectInputException("число не лежит в промежутке от 1 до 10");
+                }
             }
         }
         return n;
     }
-    public static String transRA(String a) {
+    public static String transRA(String a) throws IncorrectInputException {
         // checking and transformation arab numbers to roman numbers
         // проверка и перевод арабских цифр в римские
         String n = "";
         if(Integer.parseInt(a) < 1){
-            n = "В римской системе нет отрицательных чисел";
+            throw new IncorrectInputException("В римской системе нет отрицательных чисел");
         }
         else {
         for(int i = 0; i < arab.length; i++){
@@ -92,5 +98,12 @@ public class calc {
          }
         }
         return n;
+    }
+}
+
+class IncorrectInputException extends Exception {
+
+    public IncorrectInputException(String message){
+        super(message);
     }
 }
